@@ -5,7 +5,6 @@ numpy>=1.24.0
 vectordb>=0.0.21
 streamlit
 # AI and ML dependencies
-semantic-kernel>=1.0.0
 openai>=1.0.0
 
 

@@ -2,7 +2,7 @@
 
 from typing import List, Dict, Optional
 import hashlib
-import openai
+from openai import AsyncOpenAI
 
 from ....domain.interfaces import IEmbeddingService
 
@@ -12,8 +12,8 @@ class OpenAIEmbeddingService(IEmbeddingService):
 
     def __init__(self, model_name: str = "text-embedding-3-large", api_key: Optional[str] = None):
         self.model_name = model_name
-        if api_key:
-            openai.api_key = api_key
+        self.api_key = api_key
+        self.client = AsyncOpenAI(api_key=api_key) if api_key else AsyncOpenAI()
         # In-memory cache for embeddings to avoid regenerating
         self._embedding_cache: Dict[str, List[float]] = {}
 
@@ -31,8 +31,7 @@ class OpenAIEmbeddingService(IEmbeddingService):
             return self._embedding_cache[text_hash]
 
         try:
-            client = openai.OpenAI()
-            response = client.embeddings.create(
+            response = await self.client.embeddings.create(
                 model=self.model_name,
                 input=[text]
             )
@@ -73,8 +72,7 @@ class OpenAIEmbeddingService(IEmbeddingService):
         # Generate embeddings for uncached texts
         if uncached_texts:
             try:
-                client = openai.OpenAI()
-                response = client.embeddings.create(
+                response = await self.client.embeddings.create(
                     model=self.model_name,
                     input=uncached_texts
                 )

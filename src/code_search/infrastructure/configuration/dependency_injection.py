@@ -9,8 +9,7 @@ from ...domain.interfaces import (
 )
 from ..storage.file import FileLoader
 from ..parsing import CodeParser
-from ..ai.semantic_kernel import SemanticKernelCodeParsingService
-from ..ai.openai import OpenAIEmbeddingService
+from ..ai.openai import OpenAIEmbeddingService, OpenAICodeParsingService
 from ..storage.vector import SimpleVectorStore
 from ...application.services import SearchService, CodeIndexer
 from .settings import get_settings
@@ -30,7 +29,7 @@ async def initialize_services(api_key: str) -> Tuple[ICodeIndexer, ISearchServic
     config = get_settings()
 
     print("🤖 Initializing AI code parsing service...")
-    ai_parsing_service = SemanticKernelCodeParsingService(
+    ai_parsing_service = OpenAICodeParsingService(
         api_key=api_key,
         model_name=config.ai_model
     )

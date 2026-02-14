@@ -1,9 +1,8 @@
 """AI services package."""
 
-from .openai import OpenAIEmbeddingService
-from .semantic_kernel import SemanticKernelCodeParsingService
+from .openai import OpenAIEmbeddingService, OpenAICodeParsingService
 
 __all__ = [
     'OpenAIEmbeddingService',
-    'SemanticKernelCodeParsingService',
+    'OpenAICodeParsingService',
 ]
